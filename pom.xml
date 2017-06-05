@@ -11,14 +11,11 @@
     <packaging>jar</packaging>
 
     <properties>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <cxf.version>3.1.10</cxf.version>
-        <cxf.scope>compile</cxf.scope>
-        <maven.bundle.plugin.version>3.3.0</maven.bundle.plugin.version>
-        <maven.build.helper.plugin>3.0.0</maven.build.helper.plugin>
-        <features.plugin>2.4.4</features.plugin>
+        <cxf.scope>provided</cxf.scope>
     </properties>
 
     <dependencies>
