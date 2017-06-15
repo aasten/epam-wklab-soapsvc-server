@@ -5,4 +5,5 @@ package com.epam.wklab.soap.simpl;
  */
 public class NoMatchedFriendsException extends Exception {
     public NoMatchedFriendsException(String msg) { super(msg); }
+    public NoMatchedFriendsException(Throwable cause) { super(cause); }
 }

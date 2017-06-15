@@ -1,24 +1,33 @@
 import com.epam.wklab.person.Friends;
 import com.epam.wklab.person.Person;
 import com.epam.wklab.soap.api.PersonFriendsIface;
+import com.epam.wklab.soap.dao.PersonDAO;
 import com.epam.wklab.soap.simpl.NoMatchedFriendsException;
 import com.epam.wklab.soap.simpl.PersonFriends;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+import java.io.StringWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
 
 /**
  * Created by sten on 12.06.17.
@@ -29,7 +38,28 @@ public class PersonFriendsTest {
 
     @BeforeClass
     public static void prepareTestClass() {
-        testedService = new PersonFriends();
+        PersonDAO mockedPersonDAO = mock(PersonDAO.class);
+        doAnswer(new Answer<Void>() {
+            public Void answer(InvocationOnMock invocation) {
+                Person got = invocation.getArgument(0);
+                {
+                    JAXBContext context = null;
+                    StringWriter out = new StringWriter();
+                    try {
+                        context = JAXBContext.newInstance(Person.class);
+                        Marshaller marshaller = context.createMarshaller();
+                        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+                        marshaller.marshal(got, out);
+                    } catch (JAXBException e) {
+                        System.err.println(e);
+                    }
+                    String xml = out.toString();
+                    System.out.println(xml);
+                }
+                return null;
+            }
+        }).when(mockedPersonDAO).store(any(Person.class));
+        testedService = new PersonFriends(mockedPersonDAO);
     }
 
     private Person preparePerson(String name, String birthdayFormat, String birthday) {
