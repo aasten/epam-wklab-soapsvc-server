@@ -54,6 +54,7 @@ public class PersonFriendsTest {
                         System.err.println(e);
                     }
                     String xml = out.toString();
+                    System.out.println("Store method of mocked DAO was called with object:");
                     System.out.println(xml);
                 }
                 return null;
